@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Data Pasien'])
+@extends('layouts.app_modern', ['title' => 'Data Pasien'])
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -19,6 +19,7 @@
                                     <th>No Pasien</th>
                                     <th>Nama</th>
                                     <th>Umur</th>
+                                    <th>Foto</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Alamat</th>
                                 </tr>
@@ -29,16 +30,25 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->no_pasien }}</td>
                                         <td>
+                                            <img src="{{ \Storage::url($item->foto) }}" alt="foto" width="100">
                                             {{ $item->nama }}
                                         </td>
                                         <td>{{ $item->umur }}</td>
-                                        <td>
-                                         @if($item->foto)
-                                        <img src="{{ asset('storage/'.$item->foto) }}" width="50">
-                                        @endif
-                                        </td>
                                         <td>{{ $item->jenis_kelamin }}</td>
-                                        <td>{{ $item->alamat }}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>
+                                            <a href="/pasien/{{ $item->id }}/edit" class="btn btn-warning btn-sm ml-2">
+                                                Edit
+                                            </a>
+                                            <form action="/pasien/{{ $item->id }}" method="post" class="d-inline">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-danger btn-sm ml-2"
+                                                    onclick="return confirm('Yakin ingin menghapus data?')">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
